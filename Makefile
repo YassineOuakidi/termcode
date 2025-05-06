@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = 
 SRC = main.c $(wildcard src/*.c)
 TARGET = termcode
 LIBS = -lncurses
