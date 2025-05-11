@@ -1,7 +1,7 @@
 
 #include "../inc/termcode.h"
 
-void process_movements(te_t *editor)
+void process_movements(te_t *editor , text_t *text)
 {
 	char c;
 	read(STDIN_FILENO , &c , 1);
@@ -21,14 +21,22 @@ void process_movements(te_t *editor)
 			break;
 		fflush(stdout);
 	}
+	text_t *node = text;
+	for(int i = 0 ; i<editor->posy ; i++)
+	{
+		node = node->next;
+	}
+	if(node->line.buffer[editor->posx]=='\n')
+		printf("here");
+	fflush(stdout);
 }
 
-int process_esc(te_t *editor)
+int process_esc(te_t *editor , text_t *text)
 {
 	char c;
 	read(STDIN_FILENO , &c , 1);
 	if(c=='[')
-		process_movements(editor);
+		process_movements(editor , text );
 	else if(c=='q')
 		return 2;
 	else if(c=='s')
@@ -44,7 +52,7 @@ void termcode_readKey(te_t *editor , char **envp , text_t *text , char *filename
 	{
 		if(c=='\x1b')
 		{
-			int status = process_esc(editor);
+			int status = process_esc(editor , text);
 			if(status==1)
 				save(editor , text , filename);
 			if(status == 2 )
@@ -54,7 +62,7 @@ void termcode_readKey(te_t *editor , char **envp , text_t *text , char *filename
 			}
 		}
 		else if(c==editor->old_termios.c_cc[VERASE])
-			erase_char(editor , text);
+			erase_char(editor , &text);
 		else 
 			my_putchar(c , editor , text);	
 	}

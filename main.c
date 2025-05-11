@@ -36,5 +36,5 @@ int main(int argc , char **argv , char **envp)
 	
 	termcode_readKey(&editor , envp , &text , filename);
 	fflush(stdout);
-	free_all(&editor , &text);
+	//free_all(&editor , &text);
 }

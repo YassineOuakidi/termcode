@@ -14,7 +14,6 @@
 #include <sys/wait.h>
 #include <stdio.h>
 #include <string.h>
-
 #include "get_next_line.h"
 
 
@@ -35,12 +34,11 @@ typedef struct term_editor_s{
 	int len_len;
 } te_t;
 
-
 typedef struct Line
 {
 	char *buffer;
 	int len;
-	int cap;	
+	int cap;
 }	line_t;
 
 typedef struct Text
@@ -67,11 +65,11 @@ void move_cursor_down(te_t *editor);
 void move_cursor_right(te_t *editor);
 void move_cursor_left(te_t *editor);
 void redraw_line(te_t *editor , char *content , int len);
-void erase_char(te_t *editor , text_t *text);
-void make_newline(char c, te_t *editor , text_t *text);
+void erase_char(te_t *editor , text_t **text);
+void make_newline(char c, te_t *editor , text_t **text);
 void redraw_under(te_t *editor , text_t *text);
 void save(te_t *editor , text_t *text , char *filename);
-void remove_line(te_t *editor , text_t *text);
+void remove_line(te_t *editor , text_t **text);
 void free_all(te_t *editor , text_t *text);
 
 //file management utils

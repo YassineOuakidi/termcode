@@ -24,6 +24,7 @@ char *create_ans(s_list **list){
 		}
 		node = node->next;
 	}
+	ans[j++] = '\n';
 	ans[j] = '\0';
 	return ans;
 

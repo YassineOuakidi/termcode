@@ -10,6 +10,7 @@ void add_char_to_line(text_t **line , char c , int pos)
 		void *t = realloc((*line)->line.buffer , (*line)->line.cap * 2 * sizeof(char));
 		(*line)->line.cap *=2;
 	}
+	
 	memmove((*line)->line.buffer + pos + 1,
 		(*line)->line.buffer + pos , 
 		(*line)->line.len - pos);
@@ -21,7 +22,7 @@ void my_putchar(char c , te_t *editor , text_t *text)
 {
 	if(c=='\r' || c=='\n')
 	{
-		make_newline(c , editor , text);
+		make_newline(c , editor , &text);
 		return ;
 	}
 
