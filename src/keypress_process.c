@@ -21,14 +21,6 @@ void process_movements(te_t *editor , text_t *text)
 			break;
 		fflush(stdout);
 	}
-	text_t *node = text;
-	for(int i = 0 ; i<editor->posy ; i++)
-	{
-		node = node->next;
-	}
-	if(node->line.buffer[editor->posx]=='\n')
-		printf("here");
-	fflush(stdout);
 }
 
 int process_esc(te_t *editor , text_t *text)
@@ -55,7 +47,7 @@ void termcode_readKey(te_t *editor , char **envp , text_t *text , char *filename
 			int status = process_esc(editor , text);
 			if(status==1)
 				save(editor , text , filename);
-			if(status == 2 )
+			else if(status == 2 )
 			{
 				tcsetattr(STDIN_FILENO , TCSAFLUSH , &(editor->old_termios));
 				return;

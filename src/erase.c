@@ -1,5 +1,17 @@
 #include "../inc/termcode.h"
 
+void cp(char *tmp , char *dest)
+{
+	if(!tmp || !dest)
+		return ;
+	size_t i = 0;
+	while(tmp[i])
+	{
+		dest[i] = tmp[i];
+		i++;
+	}
+}
+
 void remove_line(te_t *editor , text_t **text)
 {
 	int height = editor->posy ;
@@ -11,18 +23,20 @@ void remove_line(te_t *editor , text_t **text)
 	while(height--)
 		node = node->next;
 	
-	if(node->line.cap - node->line.len < node->next->line.len)
+
+	if(node->line.cap - node->line.len <= node->next->line.len)
 	{
 		node->line.buffer = realloc(node->line.buffer , node->line.cap * 2 );
 		node->line.cap *=2;
 	}
-	memmove(node->line.buffer + node->line.len ,
-		node->next->line.buffer ,
-		node->next->line.len );
 	
-	memmove(editor->line_len + editor->posy,
+	memmove(node->line.buffer + node->line.len - 1,
+		node->next->line.buffer ,
+		node->next->line.len + 1);
+	
+	memmove(editor->line_len + editor->posy ,
 		editor->line_len + editor->posy + 1,
-		editor->len_len - editor->posy);
+		editor->len_len - editor->posy - 1 );
 
 	text_t *tmp = node->next;
 
@@ -32,10 +46,8 @@ void remove_line(te_t *editor , text_t **text)
 		node->next = NULL;
 
 	editor->line_len[editor->posy - 1] += ft_strlen(tmp->line.buffer);
+	node->line.len = ft_strlen(node->line.buffer) + 1;
 	
-	free(tmp->line.buffer);
-	
-	free(tmp);
 	
 	editor->posy--;
 
@@ -52,6 +64,7 @@ void remove_line(te_t *editor , text_t **text)
 
 void erase_char(te_t *editor , text_t **text)
 {
+	fflush(stdout);
 	if(editor->posx == 0)
 	{
 		remove_line(editor , text);
@@ -67,8 +80,6 @@ void erase_char(te_t *editor , text_t **text)
 	memmove( node->line.buffer + editor->posx - 1,
 		node->line.buffer + editor->posx  ,
 		node->line.len - editor->posx + 1);
-
-	node->line.buffer[node->line.len - 1] = '\0'; 
 
 	node->line.len--;
 	

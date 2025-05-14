@@ -9,7 +9,6 @@ text_t text;
 
 int main(int argc , char **argv , char **envp)
 {
-	
 	if(argc!=2)
 	{
 		write(STDERR_FILENO , "Usage : ./termcode <filename>\n" , 30);
@@ -17,8 +16,8 @@ int main(int argc , char **argv , char **envp)
 	}
 
 	filename = ft_strdup(argv[1]);
-
-	int fd = open(filename , O_CREAT | O_RDONLY );
+	
+	int fd = open(filename , O_CREAT | O_RDWR  , 0644);
 
 	if(fd==-1)
 	{
@@ -33,7 +32,6 @@ int main(int argc , char **argv , char **envp)
 	
 	output_content(fd , &editor , &text );
 	close(fd);
-	
 	termcode_readKey(&editor , envp , &text , filename);
 	fflush(stdout);
 	//free_all(&editor , &text);

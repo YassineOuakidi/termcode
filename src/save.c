@@ -1,25 +1,23 @@
-
 #include "../inc/termcode.h"
 
 
 void save(te_t *editor , text_t *text , char *filename)
 {
 	int fd;
+	
+	fflush(stdout);
+
 	if(filename==NULL)
 		fd = open("test" , O_WRONLY | O_TRUNC | O_CREAT);
 	else
-		fd = open(filename , O_WRONLY | O_TRUNC);
-	text_t *node = text;
-	char endl = '\n';
-	while(text)
+		fd = open(filename , O_WRONLY | O_TRUNC , 0644);
+	text_t *node = text->next;
+	while(node)
 	{
-		if(text->line.buffer)
-		{
-			//write(fd , tmp , ft_strlen(tmp));
-			write(fd , text->line.buffer , ft_strlen(text->line.buffer));
-			if(text->line.buffer[text->line.len]!='\n')
-				write(fd , &endl , 1);
-		}
-		text = text->next;
+		if(node->line.buffer!=NULL)
+			write(fd , node->line.buffer , ft_strlen(node->line.buffer));
+
+		node = node->next;
 	}
+	close(fd);
 }

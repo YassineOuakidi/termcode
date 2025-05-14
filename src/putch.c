@@ -12,11 +12,10 @@ void add_char_to_line(text_t **line , char c , int pos)
 	}
 	
 	memmove((*line)->line.buffer + pos + 1,
-		(*line)->line.buffer + pos , 
-		(*line)->line.len - pos);
+		(*line)->line.buffer + pos ,
+		(*line)->line.len - pos + 1);
 	(*line)->line.buffer[pos] = c;
 }
-
 
 void my_putchar(char c , te_t *editor , text_t *text)
 {
@@ -35,10 +34,14 @@ void my_putchar(char c , te_t *editor , text_t *text)
 	}
 	
 	add_char_to_line(&node , c , editor->posx );
+	
 	editor->line_len[editor->posy]++;
 	node->line.len++;
-	redraw_line(editor , node->line.buffer , node->line.len);
+	
+	redraw_line(editor , node->line.buffer , ft_strlen(node->line.buffer));
+	
 	editor->tgoto_str = tgoto(editor->cursor_motion_str , ++editor->posx , editor->posy);
 	tputs(editor->tgoto_str , 1 , putchar);
+	
 	fflush(stdout);
 }
